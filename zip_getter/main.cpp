@@ -1,5 +1,5 @@
 // reading an entire binary file
-#include "zipHeader.h"
+#include "header/zipHeader.h"
 #include <iostream>
 #include <fstream>
 #include <memory>

@@ -5,5 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 file(GLOB_RECURSE headers 
      "source/*.cpp"
 )
+include_directories(header)
 add_executable(zip_header_getter main.cpp ${headers}) 
 target_include_directories(zip_header_getter PRIVATE ${YOUR_DIRECTORY})
+include_directories(zip_getter zip_getter/header)
