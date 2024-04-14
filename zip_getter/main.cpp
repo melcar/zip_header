@@ -34,6 +34,7 @@ int main()
         std::cout << "the entire file content is in memory:\n";
         printRawFile(*memblock, size);
         ZipHeader header{std::move(memblock), size};
+        std::cout << header<<std::endl;
     }
     else
     {

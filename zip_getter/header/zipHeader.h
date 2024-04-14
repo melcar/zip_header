@@ -45,6 +45,8 @@ struct ZipHeader
     ZipHeader() = delete;
     ZipHeader(std::unique_ptr<char *> data, std::streampos size);
 
+    friend std::ostream &operator<<(std::ostream &os, const ZipHeader &zh);
+
 private:
 protected:
     // friend std::ostream &operator<<(std::ostream &os, const ZipHeader &dt);

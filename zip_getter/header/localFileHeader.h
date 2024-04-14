@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <numeric>
+#include <ostream>
 namespace
 {
     constexpr size_t numberOfFields = 11;
@@ -28,7 +29,8 @@ namespace
 
     constexpr std::array<Field, numberOfFields> fields = {HeaderSignature, VersionToExtract, BitFlags, CompressedMethods, LastModifiedTime, LastModifiedDate, CRC32, CompressedSize, UncompressedSize, NameLength, ExtraFieldsLength};
 
-    [[maybe_unused]] size_t getOffset(Field field){
+    [[maybe_unused]] size_t getOffset(Field field)
+    {
         return offsets[field];
     }
 }
@@ -56,5 +58,6 @@ struct LocalFileHeader
      @memory has to be at the right place
      */
     LocalFileHeader(char *memory, std::streampos size);
-    void print();
+
+    friend std::ostream &operator<<(std::ostream &os, const LocalFileHeader &lfh);
 };

@@ -10,7 +10,6 @@ ZipHeader::ZipHeader(std::unique_ptr<char *> data, std::streampos size) : _data(
         {
         case HeaderType::LocalHeader:
             _localFileHeaders.push_back({current, size - offset});
-            _localFileHeaders.begin()->print();
             break;
         case HeaderType::DataDescriptor:
             break;
@@ -21,7 +20,7 @@ ZipHeader::ZipHeader(std::unique_ptr<char *> data, std::streampos size) : _data(
         case HeaderType::Uknown:
             break;
         }
-        offset += 1;// just for now
+        offset += 1; // just for now
     }
 }
 
@@ -44,4 +43,13 @@ HeaderType ZipHeader::getHeaderType(char *data)
     default:
         return HeaderType::Uknown;
     }
+}
+
+std::ostream &operator<<(std::ostream &os, const ZipHeader &zh)
+{
+    for (const auto &lfh : zh._localFileHeaders)
+    {
+        os << lfh << "\n--------------------------------\n";
+    }
+    return os;
 }

@@ -15,7 +15,7 @@ LocalFileHeader::LocalFileHeader(char *memory, std::streampos size)
     setValue(headerSignature, &memory[offset]);
     offset += getOffset(Field::HeaderSignature);
 
-    std::cout << std::hex<< headerSignature<<std::endl;
+    std::cout << std::hex << headerSignature << std::endl;
     setValue(versionToExtract, &memory[offset]);
     offset += getOffset(Field::VersionToExtract);
 
@@ -47,17 +47,19 @@ LocalFileHeader::LocalFileHeader(char *memory, std::streampos size)
     offset += getOffset(Field::ExtraFieldsLength);
 }
 
-void LocalFileHeader::print()
+std::ostream &operator<<(std::ostream &os, const LocalFileHeader&lfh)
+
 {
-    std::cout << "HeaderSignature: " <<std::hex << headerSignature << "\n";
-    std::cout << "Version to extract: " << versionToExtract << "\n";
-    std::cout << "Bit flags: " << bitFlags << "\n";
-    std::cout << "Compressed methods: " << compressedMethods << "\n";
-    std::cout << "Last modified time: " << lastModifiedTime << "\n";
-    std::cout << "Last modified date: " << lastModifiedDate << "\n";
-    std::cout << "CRC32: " << CRC32 << "\n";
-    std::cout << "Compressed size: " << compressedSize << "\n";
-    std::cout << "UncompressedSize: " << uncompressedSize << "\n";
-    std::cout << "Name length: " << nameLength << "\n";
-    std::cout << "Extra fields length: " << extraFieldsLength << "\n";
+    os << "HeaderSignature: " << std::hex << lfh.headerSignature << "\n";
+    os << "Version to extract: " << lfh.versionToExtract << "\n";
+    os << "Bit flags: " <<lfh. bitFlags << "\n";
+    os << "Compressed methods: " << lfh.compressedMethods << "\n";
+    os << "Last modified time: " << lfh.lastModifiedTime << "\n";
+    os << "Last modified date: " << lfh.lastModifiedDate << "\n";
+    os << "CRC32: " << lfh.CRC32 << "\n";
+    os << "Compressed size: " << lfh.compressedSize << "\n";
+    os << "UncompressedSize: " << lfh.uncompressedSize << "\n";
+    os << "Name length: " << lfh.nameLength << "\n";
+    os << "Extra fields length: " << lfh.extraFieldsLength << "\n";
+    return os;
 }
