@@ -9,7 +9,7 @@ namespace
 {
     constexpr size_t numberOfFields = 11;
     // contains offset for each field we have to read up to fileName
-    constexpr std::array<size_t, numberOfFields + 1> offsets{0, 4, 2, 2, 2, 2, 2, 4, 4, 4, 2, 2};
+    constexpr std::array<size_t, numberOfFields> offsets{ 4, 2, 2, 2, 2, 2, 4, 4, 4, 2, 2};
     constexpr int minimumByteSize = std::accumulate(offsets.begin(), offsets.end(), 0);
 
     typedef enum
