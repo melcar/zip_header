@@ -4,9 +4,17 @@
 #include <fstream>
 #include <memory>
 
-constexpr u_int central_directory = 0;
-void readFile(char *fileContent)
+void printRawFile(const char *data, int size)
 {
+    if (size > 0)
+    {
+        std::cout << "\n----------START-----------\n";
+        for (int i = 0; i < size; i++)
+        {
+            std::cout << data[i];
+        }
+        std::cout << "\n----------END-----------\n";
+    }
 }
 
 int main()
@@ -23,9 +31,9 @@ int main()
         file.read(*memblock, size);
         file.close();
 
-        std::cout << "the entire file content is in memory";
-
-        ZipHeader header{std::move(memblock)};
+        std::cout << "the entire file content is in memory:\n";
+        printRawFile(*memblock, size);
+        ZipHeader header{std::move(memblock), size};
     }
     else
     {

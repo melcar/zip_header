@@ -1,58 +1,58 @@
 #pragma once
+#include <vector>
 #include <iostream>
 #include <array>
 #include <memory>
 #include <bit>
 
+#include "byteSize.h"
+#include "localFileHeader.h"
+#include "endOfCentralDirectory.h"
+#include "centralDirectoryFileHeader.h"
+#include "dataDescriptor.h"
+
 namespace
 {
-    bool is_big_endian(void)
+    [[maybe_unused]] bool is_big_endian(void)
     {
         if constexpr (std::endian::native == std::endian::big)
         {
-        return true;
+            return true;
         }
         else if constexpr (std::endian::native == std::endian::little)
         {
-        return false;
+            return false;
         }
     }
-}
 
-union HeaderFields
-{
-    struct
+    constexpr fourBytes LocalHeaderFileSignature = 0x04034b50;
+    constexpr fourBytes DataDescriptorSignature = 0x08074b50;
+    constexpr fourBytes CentralDirectorySignature = 0x02014b50;
+    constexpr fourBytes EndOfCentralDirectorySignature = 0x06054b50;
+    typedef enum
     {
-    } centralDirectoryFileHeaderSignature;
-};
+        LocalHeader = 0,
+        DataDescriptor = 1,
+        CentralDirectory = 2,
+        EndOfCentralDirectory = 3,
+        Uknown = 4
+    } HeaderType;
+
+}
 
 struct ZipHeader
 {
-    ZipHeader(std::unique_ptr<char *> data);
+    ZipHeader() = delete;
+    ZipHeader(std::unique_ptr<char *> data, std::streampos size);
 
+private:
 protected:
-    uint32_t centralDirectorFileHeaderSignature : 32;
-    uint16_t compressVersion : 16;
-    uint16_t extractVersion : 16;
-    uint16_t generalPurposeBitFlag : 16;
-    uint16_t compressionMethod : 16;
-    uint16_t lastModifiedTime : 16;
-    uint16_t lastModifiedDate : 16;
-    uint32_t CRCC32OfUnCompressed : 32;
-    uint32_t compressedSize : 32;
-    uint32_t uncompressedSize : 32;
-    uint16_t fileNameLenght : 16;
-    uint16_t extraFieldLenght : 16;
-    uint16_t fileCommentLength : 16;
-    uint16_t diskNumberStartOfFIles : 16;
-    uint16_t internalFileAttributes : 16;
-    uint32_t externalFileAttributes : 32;
-    uint32_t relativeOffsetOfLocalFileHeader : 32;
-    std::string fileName = "";
-    std::string extraField = "";
-    std::string fileComments = "";
-
     // friend std::ostream &operator<<(std::ostream &os, const ZipHeader &dt);
 private:
+    static HeaderType getHeaderType(char *data);
     std::unique_ptr<char *> _data;
+    std::streampos _size;
+    std::vector<LocalFileHeader> _localFileHeaders;
+    // EndOfCentralDirectoryRecord endOfCentralDirectoryRecord;
+    // CentralDirectoryFileHeader centralDirectoryFileHeader;
 };

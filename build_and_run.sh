@@ -7,3 +7,5 @@ cmake -B"$BUILD_DIRECTORY" -Szip_getter;
 cd "$BUILD_DIRECTORY";
 make;
 mv "zip_header_getter" "../"
+cd ../
+./zip_header_getter
