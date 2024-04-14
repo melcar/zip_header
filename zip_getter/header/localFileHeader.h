@@ -1,15 +1,18 @@
 #pragma once
+
+#include <vector>
 #include <cstdint>
-#include "byteSize.h"
 #include <string>
 #include <memory>
 #include <numeric>
 #include <ostream>
+
+#include "byteSize.h"
 namespace
 {
     constexpr size_t numberOfFields = 11;
     // contains offset for each field we have to read up to fileName
-    constexpr std::array<size_t, numberOfFields> offsets{ 4, 2, 2, 2, 2, 2, 4, 4, 4, 2, 2};
+    constexpr std::array<size_t, numberOfFields> offsets{4, 2, 2, 2, 2, 2, 4, 4, 4, 2, 2};
     constexpr int minimumByteSize = std::accumulate(offsets.begin(), offsets.end(), 0);
 
     typedef enum
@@ -48,8 +51,9 @@ struct LocalFileHeader
     fourBytes uncompressedSize;
     twoBytes nameLength;
     twoBytes extraFieldsLength;
-    std::string fileName;
-    std::string extraFields;
+    std::vector<char> fileName;
+    std::vector<char> extraFields;
+    std::vector<char> compressedContent;
     // byte offset
     size_t offset;
     LocalFileHeader() = delete;
@@ -60,4 +64,9 @@ struct LocalFileHeader
     LocalFileHeader(char *memory, std::streampos size);
 
     friend std::ostream &operator<<(std::ostream &os, const LocalFileHeader &lfh);
+
+    void setFileName(char *data);
+    void setExtraFields(char *data);
+    void setCompressedContent(char *data);
+    size_t getHeaderSize();
 };
